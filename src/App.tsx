@@ -38,6 +38,8 @@ export default function App() {
             {page === "empleados" && <Placeholder title="Empleados / Personal operativo" />}
             {page === "paquetes" && <Placeholder title="Paquetes" />}
             {page === "parqueadero" && <Placeholder title="Parqueadero" />}
+            {page === "piscina" && <Placeholder title="Piscina" />}
+            {page === "eventos" && <Placeholder title="Eventos / Salón social" />}
             {page === "reservas" && <Placeholder title="Reservas" />}
             {page === "caja" && <Placeholder title="Caja" />}
             {page === "migracion" && <Placeholder title="Migración" />}

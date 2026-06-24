@@ -8,6 +8,8 @@ import {
   Briefcase,
   Package,
   Car,
+  Waves,
+  PartyPopper,
   CalendarCheck,
   BarChart3,
   Bell,
@@ -33,6 +35,8 @@ export type PageId =
   | "operadores"
   | "paquetes"
   | "parqueadero"
+  | "piscina"
+  | "eventos"
   | "reservas"
   | "caja"
   | "migracion"
@@ -48,6 +52,8 @@ const items: { id: PageId; label: string; icon: typeof LayoutDashboard; badge?: 
   { id: "operadores", label: "Operadores", icon: Briefcase, badge: "18" },
   { id: "paquetes", label: "Paquetes", icon: Package, badge: "12" },
   { id: "parqueadero", label: "Parqueadero", icon: Car },
+  { id: "piscina", label: "Piscina", icon: Waves },
+  { id: "eventos", label: "Eventos", icon: PartyPopper, badge: "2" },
   { id: "reservas", label: "Reservas", icon: CalendarCheck, badge: "6" },
   { id: "reportes", label: "Reportes", icon: BarChart3 },
   { id: "caja", label: "Caja", icon: Wallet },
