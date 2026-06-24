@@ -3,6 +3,8 @@ import {
   LogIn,
   LogOut,
   Users,
+  UserPlus,
+  HardHat,
   Package,
   Car,
   CalendarCheck,
@@ -12,6 +14,8 @@ import {
   Building2,
   Sparkles,
   FileText,
+  Wallet,
+  Archive,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -23,9 +27,13 @@ export type PageId =
   | "checkout"
   | "reportes"
   | "huespedes"
+  | "visitantes"
+  | "empleados"
   | "paquetes"
   | "parqueadero"
   | "reservas"
+  | "caja"
+  | "migracion"
   | "registros";
 
 const items: { id: PageId; label: string; icon: typeof LayoutDashboard; badge?: string }[] = [
@@ -33,11 +41,15 @@ const items: { id: PageId; label: string; icon: typeof LayoutDashboard; badge?: 
   { id: "checkin", label: "Check-in", icon: LogIn, badge: "23" },
   { id: "checkout", label: "Check-out", icon: LogOut, badge: "18" },
   { id: "huespedes", label: "Huéspedes", icon: Users },
+  { id: "visitantes", label: "Visitantes", icon: UserPlus, badge: "47" },
+  { id: "empleados", label: "Empleados", icon: HardHat },
   { id: "paquetes", label: "Paquetes", icon: Package, badge: "12" },
   { id: "parqueadero", label: "Parqueadero", icon: Car },
   { id: "reservas", label: "Reservas", icon: CalendarCheck, badge: "6" },
   { id: "reportes", label: "Reportes", icon: BarChart3 },
-  { id: "registros", label: "Registros", icon: FileText },
+  { id: "caja", label: "Caja", icon: Wallet },
+  { id: "migracion", label: "Migración", icon: FileText },
+  { id: "registros", label: "Registros", icon: Archive },
 ];
 
 const bottom = [

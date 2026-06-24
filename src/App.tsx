@@ -32,9 +32,13 @@ export default function App() {
             {page === "checkout" && <CheckOutPage />}
             {page === "reportes" && <ReportsPage />}
             {page === "huespedes" && <Placeholder title="Huéspedes" />}
+            {page === "visitantes" && <Placeholder title="Visitantes" />}
+            {page === "empleados" && <Placeholder title="Empleados / Personal operativo" />}
             {page === "paquetes" && <Placeholder title="Paquetes" />}
             {page === "parqueadero" && <Placeholder title="Parqueadero" />}
             {page === "reservas" && <Placeholder title="Reservas" />}
+            {page === "caja" && <Placeholder title="Caja" />}
+            {page === "migracion" && <Placeholder title="Migración" />}
             {page === "registros" && <Placeholder title="Registros" />}
           </div>
 
