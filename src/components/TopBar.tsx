@@ -106,7 +106,7 @@ export function TopBar({ onOpenAssistant, theme, onToggleTheme }: TopBarProps) {
 
         {/* Avatar */}
         <Avatar className="ring-2 ring-primary/30">
-          <AvatarFallback className="bg-gradient-to-br from-cyan-400 to-blue-700 text-slate-900">M</AvatarFallback>
+          <AvatarFallback className="bg-gradient-to-br from-primary to-primary/70 text-primary-foreground">M</AvatarFallback>
         </Avatar>
       </div>
     </header>

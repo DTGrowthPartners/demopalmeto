@@ -28,11 +28,10 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
   apartmentsList,
-  mediosReserva,
   motivosViaje,
   procedencias,
 } from "@/data/mock";
-import { cn, formatCOP } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 type StepId = 1 | 2 | 3 | 4 | 5;
 
@@ -52,16 +51,12 @@ export function CheckInPage() {
   const [vehiculo, setVehiculo] = useState<boolean>(true);
   const [placa, setPlaca] = useState<string>("FQR-872");
   const [noches, setNoches] = useState<number>(5);
-  const [medio, setMedio] = useState<string>("directo");
   const [procedencia, setProcedencia] = useState<string>(procedencias[0]);
   const [motivo, setMotivo] = useState<string>(motivosViaje[0]);
   const [confirmando, setConfirmando] = useState(false);
   const [confirmado, setConfirmado] = useState(false);
 
   const apto = apartmentsList.find((a) => a.id === aptId) ?? apartmentsList[0];
-  const valorNoche = 850_000;
-  const valorAdicional = 120_000;
-  const total = noches * (valorNoche + adicional * valorAdicional);
 
   // Reset confirmed flag on step backward
   useEffect(() => {
@@ -343,25 +338,15 @@ export function CheckInPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <label className="text-[12.5px] font-medium">Medio de reserva</label>
-                  <div className="flex flex-wrap gap-2">
-                    {mediosReserva.map((m) => {
-                      const sel = m.id === medio;
-                      return (
-                        <button
-                          key={m.id}
-                          onClick={() => setMedio(m.id)}
-                          className={cn(
-                            "text-[12px] rounded-full border px-3 py-1 transition-colors",
-                            sel
-                              ? "border-primary/60 bg-primary/15 text-primary"
-                              : "border-border/60 bg-card/40 hover:bg-card/80"
-                          )}
-                        >
-                          {m.label}
-                        </button>
-                      );
-                    })}
+                  <label className="text-[12.5px] font-medium">Operador asignado</label>
+                  <div className="rounded-xl border border-primary/40 bg-primary/10 px-4 py-3">
+                    <div className="text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
+                      Reserva creada por
+                    </div>
+                    <div className="mt-1 text-[15px] font-semibold text-primary">
+                      {apto.operador}
+                    </div>
+                    <div className="text-[11.5px] text-muted-foreground">{apto.rnt}</div>
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -448,19 +433,19 @@ export function CheckInPage() {
                 ] : [["Vehículo", "Sin vehículo declarado"]]} />
               </div>
 
-              <div className="rounded-xl border border-primary/30 bg-gradient-to-br from-primary/10 to-transparent p-4 flex items-center justify-between">
-                <div>
+              <div className="rounded-xl border border-primary/40 bg-gradient-to-br from-primary/15 via-primary/5 to-transparent p-4 flex items-center justify-between gap-4">
+                <div className="min-w-0">
                   <div className="text-[11.5px] uppercase tracking-[0.18em] text-muted-foreground">
-                    Total estimado de la estancia
+                    Operador titular de la reserva
                   </div>
-                  <div className="mt-1 text-[28px] font-bold tracking-tight tabular-nums">
-                    {formatCOP(total)}
+                  <div className="mt-1 text-[22px] font-bold tracking-tight text-primary truncate">
+                    {apto.operador}
                   </div>
                   <div className="text-[11.5px] text-muted-foreground">
-                    {formatCOP(valorNoche)} / noche · {adicional} adicional × {formatCOP(valorAdicional)}
+                    {apto.rnt} · Apto {apto.id} · {noches} noches · {guestCount + adicional} pax
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="text-right shrink-0">
                   <Badge variant="success" className="mb-1">Listo para confirmar</Badge>
                   <div className="text-[11.5px] text-muted-foreground">Folio · F-2026-04830</div>
                 </div>

@@ -61,7 +61,7 @@ export function ManillasInventory() {
                   className={
                     agotado
                       ? "h-full rounded-full bg-gradient-to-r from-slate-500/60 to-slate-600/60 transition-all duration-1000 ease-td"
-                      : "h-full rounded-full bg-gradient-to-r from-cyan-400 to-sky-500 transition-all duration-1000 ease-td"
+                      : "h-full rounded-full bg-gradient-to-r from-primary to-primary/70 transition-all duration-1000 ease-td"
                   }
                   style={{ width: `${pct}%` }}
                 />

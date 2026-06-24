@@ -22,7 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { activeStays } from "@/data/mock";
-import { cn, formatCOP } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 type Filter = "todos" | "hoy" | "manana" | "vencidos";
 
@@ -48,7 +48,7 @@ export function CheckOutPage() {
 
   const todayCount = activeStays.filter((s) => s.scheduledOut.startsWith("Hoy")).length;
   const tomorrowCount = activeStays.filter((s) => s.scheduledOut.startsWith("Mañana")).length;
-  const totalRevenue = activeStays.reduce((acc, s) => acc + s.total, 0);
+  const totalNights = activeStays.reduce((acc, s) => acc + s.nights, 0);
 
   const submit = () => {
     setConfirming(true);
@@ -86,7 +86,7 @@ export function CheckOutPage() {
                   Registros activos
                 </CardTitle>
                 <CardDescription>
-                  {filtered.length} de {activeStays.length} estancias visibles · ingresos totales {formatCOP(totalRevenue)}
+                  {filtered.length} de {activeStays.length} estancias visibles · {totalNights} noches activas en el edificio
                 </CardDescription>
               </div>
               <div className="flex items-center gap-2">
@@ -168,10 +168,10 @@ export function CheckOutPage() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-[13px] font-semibold tabular-nums">
-                            {formatCOP(s.total)}
+                          <div className="text-[12.5px] font-semibold text-primary truncate max-w-[160px]">
+                            {s.operator}
                           </div>
-                          <div className="text-[11px] text-muted-foreground">{s.operator}</div>
+                          <div className="text-[11px] text-muted-foreground">{s.rnt}</div>
                         </div>
                         <ArrowRight
                           className={cn(
@@ -229,19 +229,17 @@ export function CheckOutPage() {
                 <Check label="Apto inspeccionado por housekeeping" defaultChecked />
                 <Check label="Sin paquetes pendientes en lobby" defaultChecked />
                 <Check label="Vehículo retirado del parqueadero" />
-                <Check label="Pagos al día (sin saldo)" defaultChecked />
+                <Check label="Operador notificado de la salida" defaultChecked />
               </ul>
 
               <Separator />
 
-              <div className="rounded-xl border border-primary/30 bg-gradient-to-br from-primary/10 to-transparent p-3 flex items-center justify-between">
-                <div>
-                  <div className="text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
-                    Total estancia
-                  </div>
-                  <div className="text-[20px] font-bold tabular-nums">{formatCOP(active.total)}</div>
+              <div className="rounded-xl border border-primary/30 bg-gradient-to-br from-primary/10 to-transparent p-3">
+                <div className="text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
+                  Operador asignado
                 </div>
-                <Badge variant="success">Saldo $0</Badge>
+                <div className="mt-1 text-[15px] font-semibold text-primary">{active.operator}</div>
+                <div className="text-[11px] text-muted-foreground">{active.rnt}</div>
               </div>
 
               {confirmed === active.folio ? (
@@ -280,7 +278,7 @@ export function CheckOutPage() {
               </div>
               <p className="text-[12.5px] text-muted-foreground leading-snug">
                 Esta semana se proyectan <strong className="text-foreground">38 check-outs</strong>.
-                Tienes 3 plazas de parqueadero que se liberan tras esta salida; el Apto 1502 las usa el viernes.
+                Tras esta salida se liberan <strong className="text-foreground">3 plazas de parqueadero</strong> y el apto queda disponible para que <strong className="text-foreground">{active.operator}</strong> ingrese una nueva reserva.
               </p>
             </CardContent>
           </Card>
@@ -292,9 +290,9 @@ export function CheckOutPage() {
 
 function Stat({ label, value, tone }: { label: string; value: number; tone: "primary" | "success" | "warning" }) {
   const palette: Record<typeof tone, string> = {
-    primary: "from-cyan-400/30 via-cyan-500/10 ring-cyan-400/30 text-cyan-200",
-    success: "from-emerald-400/30 via-emerald-500/10 ring-emerald-400/30 text-emerald-200",
-    warning: "from-amber-400/30 via-amber-500/10 ring-amber-400/30 text-amber-200",
+    primary: "from-primary/25 via-primary/10 ring-primary/30 text-primary",
+    success: "from-emerald-500/25 via-emerald-500/10 ring-emerald-500/30 text-emerald-600 dark:text-emerald-200",
+    warning: "from-amber-500/25 via-amber-500/10 ring-amber-500/30 text-amber-600 dark:text-amber-200",
   } as any;
   return (
     <div className={cn(

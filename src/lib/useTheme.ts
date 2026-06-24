@@ -46,3 +46,30 @@ export function useTheme() {
     toggle: () => setTheme((t) => (t === "dark" ? "light" : "dark")),
   };
 }
+
+/**
+ * Returns the resolved color value of a CSS variable (e.g. `--primary`)
+ * and re-evaluates whenever the theme class on <html> changes. Use this
+ * for libraries like Recharts that don't pick up CSS vars in SVG.
+ */
+export function useCssVar(varName: string, fallback = ""): string {
+  const [value, setValue] = useState(fallback);
+
+  useEffect(() => {
+    const read = () => {
+      const raw = getComputedStyle(document.documentElement)
+        .getPropertyValue(varName)
+        .trim();
+      setValue(raw ? `hsl(${raw})` : fallback);
+    };
+    read();
+    const obs = new MutationObserver(read);
+    obs.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "style"],
+    });
+    return () => obs.disconnect();
+  }, [varName, fallback]);
+
+  return value;
+}

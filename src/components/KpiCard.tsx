@@ -15,10 +15,14 @@ interface KpiCardProps {
 }
 
 const tonePalette = {
-  primary: "from-cyan-400/30 via-cyan-500/10 to-transparent text-cyan-300 ring-cyan-400/25",
-  success: "from-emerald-400/30 via-emerald-500/10 to-transparent text-emerald-300 ring-emerald-400/25",
-  warning: "from-amber-400/30 via-amber-500/10 to-transparent text-amber-300 ring-amber-400/25",
-  destructive: "from-rose-400/30 via-rose-500/10 to-transparent text-rose-300 ring-rose-400/25",
+  primary:
+    "from-primary/25 via-primary/10 to-transparent text-primary ring-primary/30",
+  success:
+    "from-emerald-500/25 via-emerald-500/10 to-transparent text-emerald-600 ring-emerald-500/30 dark:text-emerald-300 dark:from-emerald-400/30 dark:via-emerald-500/10 dark:ring-emerald-400/25",
+  warning:
+    "from-amber-500/25 via-amber-500/10 to-transparent text-amber-600 ring-amber-500/30 dark:text-amber-300 dark:from-amber-400/30 dark:via-amber-500/10 dark:ring-amber-400/25",
+  destructive:
+    "from-rose-500/25 via-rose-500/10 to-transparent text-rose-600 ring-rose-500/30 dark:text-rose-300 dark:from-rose-400/30 dark:via-rose-500/10 dark:ring-rose-400/25",
 };
 
 export function KpiCard({

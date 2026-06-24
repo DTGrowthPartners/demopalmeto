@@ -6,7 +6,6 @@ import {
   Cell,
   Legend,
   Line,
-  LineChart,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -16,13 +15,13 @@ import {
 } from "recharts";
 import {
   BarChart3,
+  Briefcase,
   CalendarRange,
   Download,
   FileSpreadsheet,
   Globe2,
   Printer,
   Trophy,
-  TrendingUp,
   Users,
 } from "lucide-react";
 import {
@@ -38,11 +37,13 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   guestAgeBreakdown,
   monthlyOccupancy2026,
+  operadores,
+  operadoresActividad,
   reservationCalidad,
   reservationsByCountry,
   topApartmentsYear,
 } from "@/data/mock";
-import { cn, formatCOP, formatNumber } from "@/lib/utils";
+import { cn, formatNumber } from "@/lib/utils";
 import { AnimatedNumber } from "@/components/AnimatedNumber";
 
 type Range = "30d" | "mes" | "ytd" | "anual";
@@ -50,7 +51,7 @@ type Range = "30d" | "mes" | "ytd" | "anual";
 export function ReportsPage() {
   const [range, setRange] = useState<Range>("ytd");
 
-  const totalIngresos = monthlyOccupancy2026.reduce((a, m) => a + m.ingresos, 0);
+  const totalReservas = monthlyOccupancy2026.reduce((a, m) => a + m.reservas, 0);
   const totalNoches = monthlyOccupancy2026.reduce((a, m) => a + m.noches, 0);
   const avgOcc = Math.round(
     monthlyOccupancy2026.reduce((a, m) => a + m.ocupacion, 0) /
@@ -60,6 +61,7 @@ export function ReportsPage() {
   const sinManilla = guestAgeBreakdown
     .filter((g) => !g.paganManilla)
     .reduce((a, g) => a + g.total, 0);
+  const operadoresActivos = operadores.length;
 
   return (
     <div className="space-y-6">
@@ -69,7 +71,7 @@ export function ReportsPage() {
           <Badge className="mb-2">Administración · Análisis</Badge>
           <h1 className="text-[28px] font-bold tracking-tight">Reportes del edificio</h1>
           <p className="text-[13.5px] text-muted-foreground mt-1">
-            Vista consolidada de ocupación, ingresos, demografía y operación. Exportable a PDF/XLS.
+            Vista consolidada de ocupación, reservas, demografía y operadores. Exportable a PDF/XLS.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -95,69 +97,68 @@ export function ReportsPage() {
       {/* Top KPIs */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-up [animation-delay:60ms]">
         <BigKpi
-          label="Ingresos YTD"
-          value={totalIngresos}
-          format={(n) => formatCOP(n)}
-          icon={TrendingUp}
+          label="Reservas YTD"
+          value={totalReservas}
+          format={(n) => formatNumber(Math.round(n))}
+          icon={CalendarRange}
           tone="primary"
         />
         <BigKpi
           label="Noches vendidas"
           value={totalNoches}
           format={(n) => formatNumber(Math.round(n))}
-          icon={CalendarRange}
+          icon={BarChart3}
           tone="success"
         />
         <BigKpi
           label="Ocupación promedio"
           value={avgOcc}
           format={(n) => `${Math.round(n)}%`}
-          icon={BarChart3}
+          icon={Trophy}
           tone="warning"
         />
         <BigKpi
-          label="Sin manilla (0-6)"
-          value={sinManilla}
-          format={(n) => `${formatNumber(Math.round(n))} pax`}
-          icon={Users}
+          label="Operadores activos"
+          value={operadoresActivos}
+          format={(n) => formatNumber(Math.round(n))}
+          icon={Briefcase}
           tone="primary"
         />
       </section>
 
-      {/* Monthly occupation + revenue */}
+      {/* Monthly reservas + noches */}
       <section className="grid grid-cols-1 xl:grid-cols-3 gap-6 animate-fade-up [animation-delay:140ms]">
         <Card className="xl:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BarChart3 className="size-4 text-primary" />
-              Ocupación e ingresos por mes · 2026
+              Reservas y noches por mes · 2026
             </CardTitle>
             <CardDescription>
-              Barras de ingresos en COP · línea de ocupación mensual.
+              Barras: reservas recibidas de operadores · línea: ocupación mensual.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={320}>
               <BarChart data={monthlyOccupancy2026} margin={{ left: -16, right: 8 }}>
                 <defs>
-                  <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(188 92% 60%)" stopOpacity={0.85} />
-                    <stop offset="100%" stopColor="hsl(220 96% 60%)" stopOpacity={0.45} />
+                  <linearGradient id="resGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.95} />
+                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0.5} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis
                   dataKey="mes"
-                  tick={{ fontSize: 11, fill: "hsl(215 20% 65%)" }}
+                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
                   tickLine={false}
                   axisLine={false}
                 />
                 <YAxis
                   yAxisId="rev"
-                  tick={{ fontSize: 11, fill: "hsl(215 20% 65%)" }}
+                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(v) => `$${(v / 1_000_000).toFixed(0)}M`}
                 />
                 <YAxis
                   yAxisId="occ"
@@ -170,21 +171,21 @@ export function ReportsPage() {
                 />
                 <Tooltip
                   contentStyle={{
-                    background: "hsl(215 50% 9%)",
-                    border: "1px solid hsl(215 30% 20%)",
+                    background: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
                     borderRadius: 10,
                     fontSize: 12,
                   }}
                   formatter={(value: number, name: string) =>
-                    name === "Ingresos" ? formatCOP(value) : `${value}%`
+                    name === "Ocupación %" ? `${value}%` : formatNumber(value)
                   }
                 />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 <Bar
                   yAxisId="rev"
-                  dataKey="ingresos"
-                  name="Ingresos"
-                  fill="url(#revGrad)"
+                  dataKey="reservas"
+                  name="Reservas"
+                  fill="url(#resGrad)"
                   radius={[8, 8, 0, 0]}
                   animationDuration={1200}
                 />
@@ -226,7 +227,7 @@ export function ReportsPage() {
                   </div>
                   <div className="h-1.5 rounded-full bg-muted/40 overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 transition-all duration-1000 ease-td"
+                      className="h-full rounded-full bg-gradient-to-r from-primary to-primary/60 transition-all duration-1000 ease-td"
                       style={{ width: `${pct}%` }}
                     />
                   </div>
@@ -237,8 +238,129 @@ export function ReportsPage() {
         </Card>
       </section>
 
-      {/* Age + quality + Top apartments */}
-      <section className="grid grid-cols-1 xl:grid-cols-3 gap-6 animate-fade-up [animation-delay:220ms]">
+      {/* Operadores ranking */}
+      <section className="grid grid-cols-1 xl:grid-cols-3 gap-6 animate-fade-up [animation-delay:200ms]">
+        <Card className="xl:col-span-2">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Briefcase className="size-4 text-primary" />
+              Actividad por operador turístico · YTD
+            </CardTitle>
+            <CardDescription>
+              Aptos asignados, reservas creadas y noches vendidas por operador.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-hidden rounded-xl border border-border/60">
+              <table className="w-full text-[13px]">
+                <thead className="bg-muted/30 text-[11px] uppercase tracking-wider text-muted-foreground">
+                  <tr>
+                    <th className="text-left font-medium p-3 w-10">#</th>
+                    <th className="text-left font-medium p-3">Operador</th>
+                    <th className="text-right font-medium p-3">Aptos</th>
+                    <th className="text-right font-medium p-3">Reservas</th>
+                    <th className="text-right font-medium p-3">Noches</th>
+                    <th className="text-left font-medium p-3 w-[180px]">Participación</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/40">
+                  {operadoresActividad.map((op, i) => {
+                    const max = operadoresActividad[0].noches;
+                    const pct = (op.noches / max) * 100;
+                    return (
+                      <tr key={op.operador} className="hover:bg-muted/20 transition-colors">
+                        <td className="p-3 tabular-nums">
+                          <span
+                            className={cn(
+                              "inline-flex size-6 items-center justify-center rounded text-[10.5px] font-bold",
+                              i === 0
+                                ? "bg-amber-400 text-slate-900"
+                                : "bg-muted/40 text-foreground"
+                            )}
+                          >
+                            {i + 1}
+                          </span>
+                        </td>
+                        <td className="p-3 font-medium">{op.operador}</td>
+                        <td className="p-3 text-right tabular-nums">{op.aptos}</td>
+                        <td className="p-3 text-right tabular-nums">{op.reservas}</td>
+                        <td className="p-3 text-right tabular-nums font-semibold">
+                          {formatNumber(op.noches)}
+                        </td>
+                        <td className="p-3">
+                          <div className="h-1.5 rounded-full bg-muted/40 overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-gradient-to-r from-primary to-primary/60 transition-all duration-1000 ease-td"
+                              style={{ width: `${pct}%` }}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Top apartments year */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Trophy className="size-4 text-amber-400" />
+              Top aptos del año
+            </CardTitle>
+            <CardDescription>Por noches reservadas</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ol className="space-y-2.5">
+              {topApartmentsYear.slice(0, 6).map((a, i) => {
+                const max = topApartmentsYear[0].noches;
+                const pct = (a.noches / max) * 100;
+                return (
+                  <li key={a.apto}>
+                    <div className="flex items-center justify-between text-[12.5px] mb-1">
+                      <span className="flex items-center gap-2 min-w-0">
+                        <span
+                          className={cn(
+                            "size-5 rounded grid place-items-center text-[10px] font-bold tabular-nums shrink-0",
+                            i === 0
+                              ? "bg-amber-400 text-slate-900"
+                              : "bg-muted/40 text-foreground"
+                          )}
+                        >
+                          {i + 1}
+                        </span>
+                        <span className="font-semibold tabular-nums">Apto {a.apto}</span>
+                      </span>
+                      <span className="text-muted-foreground tabular-nums text-[11.5px] shrink-0">
+                        {a.noches} noches · {a.reservas} reservas
+                      </span>
+                    </div>
+                    <div className="text-[10.5px] text-muted-foreground ml-7 mb-1 truncate">
+                      {a.operador}
+                    </div>
+                    <div className="h-1.5 rounded-full bg-muted/40 overflow-hidden ml-7">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-primary to-primary/60 transition-all duration-1000 ease-td"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+            <Button variant="ghost" size="sm" className="mt-3 w-full gap-1">
+              <Download className="size-3.5" />
+              Descargar reporte completo
+            </Button>
+          </CardContent>
+        </Card>
+      </section>
+
+      {/* Age + quality */}
+      <section className="grid grid-cols-1 xl:grid-cols-2 gap-6 animate-fade-up [animation-delay:260ms]">
         {/* Age breakdown */}
         <Card>
           <CardHeader>
@@ -247,26 +369,26 @@ export function ReportsPage() {
               Edad de los huéspedes
             </CardTitle>
             <CardDescription>
-              {totalAge} pax · niños 0-6 no consumen manilla
+              {totalAge} pax · niños 0-6 ({sinManilla}) no consumen manilla
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <ResponsiveContainer width="100%" height={180}>
               <BarChart data={guestAgeBreakdown} layout="vertical" margin={{ left: 16 }}>
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                <XAxis type="number" tick={{ fontSize: 11, fill: "hsl(215 20% 65%)" }} axisLine={false} tickLine={false} />
+                <XAxis type="number" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
                 <YAxis
                   type="category"
                   dataKey="rango"
-                  tick={{ fontSize: 11, fill: "hsl(215 20% 65%)" }}
+                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
                   axisLine={false}
                   tickLine={false}
                   width={40}
                 />
                 <Tooltip
                   contentStyle={{
-                    background: "hsl(215 50% 9%)",
-                    border: "1px solid hsl(215 30% 20%)",
+                    background: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
                     borderRadius: 10,
                     fontSize: 12,
                   }}
@@ -312,8 +434,8 @@ export function ReportsPage() {
                 <PieChart>
                   <Tooltip
                     contentStyle={{
-                      background: "hsl(215 50% 9%)",
-                      border: "1px solid hsl(215 30% 20%)",
+                      background: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
                       borderRadius: 10,
                       fontSize: 12,
                     }}
@@ -324,7 +446,7 @@ export function ReportsPage() {
                     outerRadius={90}
                     paddingAngle={3}
                     dataKey="value"
-                    stroke="hsl(215 50% 9%)"
+                    stroke="hsl(var(--card))"
                     strokeWidth={2}
                     animationDuration={1200}
                   >
@@ -332,7 +454,7 @@ export function ReportsPage() {
                       <Cell
                         key={i}
                         fill={
-                          ["hsl(188 92% 60%)", "hsl(220 96% 65%)", "hsl(39 96% 60%)"][i]
+                          ["hsl(var(--primary))", "hsl(220 96% 65%)", "hsl(39 96% 60%)"][i]
                         }
                       />
                     ))}
@@ -353,7 +475,7 @@ export function ReportsPage() {
                     <span
                       className="size-2.5 rounded-full"
                       style={{
-                        background: ["hsl(188 92% 60%)", "hsl(220 96% 65%)", "hsl(39 96% 60%)"][i],
+                        background: ["hsl(var(--primary))", "hsl(220 96% 65%)", "hsl(39 96% 60%)"][i],
                       }}
                     />
                     {r.calidad}
@@ -364,63 +486,13 @@ export function ReportsPage() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Top apartments year */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Trophy className="size-4 text-amber-400" />
-              Top aptos del año
-            </CardTitle>
-            <CardDescription>Por noches reservadas e ingresos</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ol className="space-y-2.5">
-              {topApartmentsYear.slice(0, 6).map((a, i) => {
-                const max = topApartmentsYear[0].noches;
-                const pct = (a.noches / max) * 100;
-                return (
-                  <li key={a.apto}>
-                    <div className="flex items-center justify-between text-[12.5px] mb-1">
-                      <span className="flex items-center gap-2">
-                        <span
-                          className={cn(
-                            "size-5 rounded grid place-items-center text-[10px] font-bold tabular-nums",
-                            i === 0
-                              ? "bg-amber-400 text-slate-900"
-                              : "bg-muted/40 text-foreground"
-                          )}
-                        >
-                          {i + 1}
-                        </span>
-                        <span className="font-semibold tabular-nums">Apto {a.apto}</span>
-                      </span>
-                      <span className="text-muted-foreground tabular-nums text-[11.5px]">
-                        {a.noches} noches · {formatCOP(a.ingresos)}
-                      </span>
-                    </div>
-                    <div className="h-1.5 rounded-full bg-muted/40 overflow-hidden">
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-sky-500 transition-all duration-1000 ease-td"
-                        style={{ width: `${pct}%` }}
-                      />
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
-            <Button variant="ghost" size="sm" className="mt-3 w-full gap-1">
-              <Download className="size-3.5" />
-              Descargar reporte completo
-            </Button>
-          </CardContent>
-        </Card>
       </section>
 
       {/* Footer note */}
       <div className="text-[11.5px] text-muted-foreground/70 text-center">
-        Datos al cierre del periodo {range.toUpperCase()} · Reportes pueden exportarse a PDF y XLS
-        para Migración Colombia, contabilidad y propietarios.
+        Datos al cierre del periodo {range.toUpperCase()} · Reportes exportables a PDF/XLS
+        para Migración Colombia, operadores y propietarios. El edificio no gestiona precios:
+        cada operador maneja su propia tarifa con el huésped.
       </div>
     </div>
   );
@@ -440,9 +512,9 @@ function BigKpi({
   tone: "primary" | "success" | "warning";
 }) {
   const palette = {
-    primary: "text-cyan-300 ring-cyan-400/30 from-cyan-400/20",
-    success: "text-emerald-300 ring-emerald-400/30 from-emerald-400/20",
-    warning: "text-amber-300 ring-amber-400/30 from-amber-400/20",
+    primary: "text-primary ring-primary/30 from-primary/15",
+    success: "text-emerald-500 ring-emerald-400/30 from-emerald-400/15 dark:text-emerald-300",
+    warning: "text-amber-600 ring-amber-400/30 from-amber-400/15 dark:text-amber-300",
   } as const;
   return (
     <Card>

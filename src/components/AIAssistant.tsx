@@ -89,8 +89,8 @@ export function AIAssistant({ open, onClose }: AIAssistantProps) {
           <div className="absolute -top-10 -right-10 size-40 rounded-full bg-primary/20 blur-3xl pointer-events-none" />
           <div className="flex items-start justify-between gap-3 relative">
             <div className="flex items-center gap-3">
-              <div className="size-10 rounded-xl bg-gradient-to-br from-cyan-300 via-sky-500 to-blue-700 grid place-items-center shadow-glow">
-                <Sparkles className="size-5 text-slate-900" />
+              <div className="size-10 rounded-xl bg-gradient-to-br from-primary via-primary to-primary/70 grid place-items-center shadow-glow">
+                <Sparkles className="size-5 text-primary-foreground" />
               </div>
               <div>
                 <div className="text-[16px] font-semibold tracking-tight">

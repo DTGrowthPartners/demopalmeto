@@ -8,19 +8,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { reservations } from "@/data/mock";
-import { CalendarCheck, ArrowRight, Moon, Users } from "lucide-react";
+import { CalendarCheck, ArrowRight, Moon, Users, Briefcase } from "lucide-react";
 
 const statusVariant = {
   confirmada: "success" as const,
   ingresada: "default" as const,
   pendiente: "warning" as const,
-};
-
-const sourceColor: Record<string, string> = {
-  directo: "bg-cyan-500/15 text-cyan-300",
-  booking: "bg-blue-500/15 text-blue-300",
-  airbnb: "bg-rose-500/15 text-rose-300",
-  operador: "bg-violet-500/15 text-violet-300",
 };
 
 export function ReservationsTable() {
@@ -32,7 +25,7 @@ export function ReservationsTable() {
             <CalendarCheck className="size-4 text-primary" />
             Próximas llegadas
           </CardTitle>
-          <CardDescription>Reservas activas y pre-registros pendientes</CardDescription>
+          <CardDescription>Reservas activas y pre-registros recibidos de operadores</CardDescription>
         </div>
         <Button variant="ghost" size="sm" className="gap-1">
           Ver todas <ArrowRight className="size-3.5" />
@@ -47,7 +40,7 @@ export function ReservationsTable() {
                 <th className="text-left font-medium p-3">Huésped</th>
                 <th className="text-left font-medium p-3">Llegada</th>
                 <th className="text-left font-medium p-3">Estancia</th>
-                <th className="text-left font-medium p-3">Canal</th>
+                <th className="text-left font-medium p-3">Operador</th>
                 <th className="text-left font-medium p-3">Estado</th>
                 <th className="text-right font-medium p-3"></th>
               </tr>
@@ -69,12 +62,9 @@ export function ReservationsTable() {
                     </div>
                   </td>
                   <td className="p-3">
-                    <span
-                      className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${
-                        sourceColor[r.source]
-                      }`}
-                    >
-                      {r.source}
+                    <span className="inline-flex items-center gap-1.5 rounded-md bg-primary/10 px-2 py-0.5 text-[11.5px] font-medium text-primary">
+                      <Briefcase className="size-3" />
+                      {r.operador}
                     </span>
                   </td>
                   <td className="p-3">

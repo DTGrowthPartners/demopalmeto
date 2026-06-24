@@ -47,9 +47,34 @@ export interface Reservation {
   arrival: string;
   nights: number;
   pax: number;
-  source: "directo" | "booking" | "airbnb" | "operador";
+  operador: string;
   status: "confirmada" | "pendiente" | "ingresada";
 }
+
+// ── Operadores turísticos reales del Palmetto Eliptic ──────────────────────
+// Fuente: https://edificiopalmettoeliptic.com/operadores.html
+export const operadores = [
+  "Blue Castle",
+  "Faro SAS",
+  "INMSER Colombia",
+  "Invercartagena Inmobiliaria",
+  "Mar&Sol Arriendos",
+  "Jordan Dimas",
+  "Santander Inmobiliaria",
+  "American Realty",
+  "Inm. Cartagena de Indias",
+  "Deyner Hernández",
+  "Darwin Ortiz",
+  "Ana Milena Álvarez",
+  "Corpusaveg",
+  "Rafael Torres",
+  "Cartagena Es Mi Casa",
+  "Cartagena VIP Rental",
+  "Lodging Cartagena",
+  "Marisol Benedetti",
+] as const;
+
+export type Operador = (typeof operadores)[number];
 
 // ── KPIs principales ────────────────────────────────────────────────────────
 export const kpis = {
@@ -114,15 +139,15 @@ export const origin = [
   { name: "Extranjeros", value: 122 },
 ];
 
-// ── Top apartamentos por renta del mes ──────────────────────────────────────
+// ── Top apartamentos del mes (por noches vendidas) ──────────────────────────
 export const topApartments = [
-  { apto: "3801", operador: "Caribbean Stays", renta: 18_400_000, noches: 28 },
-  { apto: "4102", operador: "Palmetto Rentals", renta: 17_900_000, noches: 27 },
-  { apto: "3505", operador: "Operador Directo", renta: 16_200_000, noches: 25 },
-  { apto: "2903", operador: "Caribbean Stays", renta: 15_750_000, noches: 24 },
-  { apto: "4001", operador: "Palmetto Rentals", renta: 15_100_000, noches: 23 },
-  { apto: "3204", operador: "Cartagena Vibes", renta: 14_500_000, noches: 22 },
-  { apto: "2705", operador: "Operador Directo", renta: 13_800_000, noches: 21 },
+  { apto: "3801", operador: "Blue Castle", noches: 28, reservas: 6 },
+  { apto: "4102", operador: "Lodging Cartagena", noches: 27, reservas: 5 },
+  { apto: "3505", operador: "Mar&Sol Arriendos", noches: 25, reservas: 4 },
+  { apto: "2903", operador: "Blue Castle", noches: 24, reservas: 5 },
+  { apto: "4001", operador: "American Realty", noches: 23, reservas: 4 },
+  { apto: "3204", operador: "Cartagena VIP Rental", noches: 22, reservas: 4 },
+  { apto: "2705", operador: "Inm. Cartagena de Indias", noches: 21, reservas: 5 },
 ];
 
 // ── Manillas por lote ───────────────────────────────────────────────────────
@@ -271,57 +296,14 @@ function buildParking(): ParkingSlot[] {
 export const parking = buildParking();
 
 // ── Reservas próximas ───────────────────────────────────────────────────────
+// El edificio NO gestiona Booking/Airbnb/Expedia: solo recibe reservas creadas
+// por los operadores turísticos asignados a cada apartamento.
 export const reservations: Reservation[] = [
-  {
-    id: "r1",
-    apartment: "3801",
-    guestName: "Ana Méndez",
-    arrival: "Hoy · 14:00",
-    nights: 7,
-    pax: 4,
-    source: "directo",
-    status: "confirmada",
-  },
-  {
-    id: "r2",
-    apartment: "2904",
-    guestName: "John Carter",
-    arrival: "Hoy · 16:30",
-    nights: 5,
-    pax: 2,
-    source: "booking",
-    status: "ingresada",
-  },
-  {
-    id: "r3",
-    apartment: "1502",
-    guestName: "Laura Pérez",
-    arrival: "Mañana · 10:00",
-    nights: 3,
-    pax: 3,
-    source: "operador",
-    status: "pendiente",
-  },
-  {
-    id: "r4",
-    apartment: "4102",
-    guestName: "Familia Restrepo",
-    arrival: "Mañana · 15:00",
-    nights: 10,
-    pax: 6,
-    source: "airbnb",
-    status: "confirmada",
-  },
-  {
-    id: "r5",
-    apartment: "3204",
-    guestName: "Diego Salazar",
-    arrival: "23 Jun · 12:00",
-    nights: 4,
-    pax: 2,
-    source: "directo",
-    status: "confirmada",
-  },
+  { id: "r1", apartment: "3801", guestName: "Ana Méndez", arrival: "Hoy · 14:00", nights: 7, pax: 4, operador: "Blue Castle", status: "confirmada" },
+  { id: "r2", apartment: "2904", guestName: "John Carter", arrival: "Hoy · 16:30", nights: 5, pax: 2, operador: "Lodging Cartagena", status: "ingresada" },
+  { id: "r3", apartment: "1502", guestName: "Laura Pérez", arrival: "Mañana · 10:00", nights: 3, pax: 3, operador: "Mar&Sol Arriendos", status: "pendiente" },
+  { id: "r4", apartment: "4102", guestName: "Familia Restrepo", arrival: "Mañana · 15:00", nights: 10, pax: 6, operador: "American Realty", status: "confirmada" },
+  { id: "r5", apartment: "3204", guestName: "Diego Salazar", arrival: "23 Jun · 12:00", nights: 4, pax: 2, operador: "Cartagena VIP Rental", status: "confirmada" },
 ];
 
 // ── Building layout (mini mapa de pisos para hover) ─────────────────────────
@@ -339,15 +321,15 @@ export const buildingFloors = Array.from({ length: 41 - 9 + 1 }, (_, i) => {
 
 // ── Apartments disponibles (selector de check-in) ───────────────────────────
 export const apartmentsList = [
-  { id: "1502", piso: 15, capacidad: 4, adicionales: 2, alcobas: 2, vista: "Mar", parqueaderos: 1, propietario: "Inv. Caribe S.A.S.", operador: "Caribbean Stays", rnt: "RNT 54211", estado: "libre" },
-  { id: "1903", piso: 19, capacidad: 6, adicionales: 2, alcobas: 3, vista: "Mar", parqueaderos: 2, propietario: "Hernández, Rocío", operador: "Operador Directo", rnt: "RNT 54322", estado: "libre" },
-  { id: "2705", piso: 27, capacidad: 4, adicionales: 2, alcobas: 2, vista: "Ciudad", parqueaderos: 1, propietario: "Restrepo & Cía.", operador: "Palmetto Rentals", rnt: "RNT 54117", estado: "libre" },
-  { id: "2904", piso: 29, capacidad: 5, adicionales: 2, alcobas: 2, vista: "Mar", parqueaderos: 1, propietario: "Mendoza, Diego", operador: "Caribbean Stays", rnt: "RNT 54402", estado: "libre" },
-  { id: "3204", piso: 32, capacidad: 6, adicionales: 3, alcobas: 3, vista: "Mar", parqueaderos: 2, propietario: "Cartagena Vibes", operador: "Cartagena Vibes", rnt: "RNT 54588", estado: "libre" },
-  { id: "3505", piso: 35, capacidad: 4, adicionales: 2, alcobas: 2, vista: "Mar", parqueaderos: 1, propietario: "Operador Directo", operador: "Operador Directo", rnt: "RNT 54705", estado: "libre" },
-  { id: "3801", piso: 38, capacidad: 8, adicionales: 4, alcobas: 4, vista: "Mar 360°", parqueaderos: 2, propietario: "Premier Holdings", operador: "Caribbean Stays", rnt: "RNT 54801", estado: "libre" },
-  { id: "4001", piso: 40, capacidad: 6, adicionales: 2, alcobas: 3, vista: "Mar", parqueaderos: 2, propietario: "Palmetto Rentals", operador: "Palmetto Rentals", rnt: "RNT 54901", estado: "libre" },
-  { id: "4102", piso: 41, capacidad: 10, adicionales: 4, alcobas: 4, vista: "Penthouse", parqueaderos: 3, propietario: "Privado", operador: "Palmetto Rentals", rnt: "RNT 54999", estado: "libre" },
+  { id: "1502", piso: 15, capacidad: 4, adicionales: 2, alcobas: 2, vista: "Mar", parqueaderos: 1, propietario: "Inv. Caribe S.A.S.", operador: "Mar&Sol Arriendos", rnt: "RNT 54211", estado: "libre" },
+  { id: "1903", piso: 19, capacidad: 6, adicionales: 2, alcobas: 3, vista: "Mar", parqueaderos: 2, propietario: "Hernández, Rocío", operador: "Lodging Cartagena", rnt: "RNT 54322", estado: "libre" },
+  { id: "2705", piso: 27, capacidad: 4, adicionales: 2, alcobas: 2, vista: "Ciudad", parqueaderos: 1, propietario: "Restrepo & Cía.", operador: "Inm. Cartagena de Indias", rnt: "RNT 54117", estado: "libre" },
+  { id: "2904", piso: 29, capacidad: 5, adicionales: 2, alcobas: 2, vista: "Mar", parqueaderos: 1, propietario: "Mendoza, Diego", operador: "Blue Castle", rnt: "RNT 54402", estado: "libre" },
+  { id: "3204", piso: 32, capacidad: 6, adicionales: 3, alcobas: 3, vista: "Mar", parqueaderos: 2, propietario: "Cartagena VIP", operador: "Cartagena VIP Rental", rnt: "RNT 54588", estado: "libre" },
+  { id: "3505", piso: 35, capacidad: 4, adicionales: 2, alcobas: 2, vista: "Mar", parqueaderos: 1, propietario: "Mar y Sol Inv.", operador: "Mar&Sol Arriendos", rnt: "RNT 54705", estado: "libre" },
+  { id: "3801", piso: 38, capacidad: 8, adicionales: 4, alcobas: 4, vista: "Mar 360°", parqueaderos: 2, propietario: "Premier Holdings", operador: "Blue Castle", rnt: "RNT 54801", estado: "libre" },
+  { id: "4001", piso: 40, capacidad: 6, adicionales: 2, alcobas: 3, vista: "Mar", parqueaderos: 2, propietario: "American Capital", operador: "American Realty", rnt: "RNT 54901", estado: "libre" },
+  { id: "4102", piso: 41, capacidad: 10, adicionales: 4, alcobas: 4, vista: "Penthouse", parqueaderos: 3, propietario: "Lodging C. Group", operador: "Lodging Cartagena", rnt: "RNT 54999", estado: "libre" },
 ];
 
 export const procedencias = [
@@ -377,14 +359,9 @@ export const motivosViaje = [
   "Visita médica",
 ];
 
-export const mediosReserva = [
-  { id: "directo", label: "Directo / Voz a voz" },
-  { id: "booking", label: "Booking.com" },
-  { id: "airbnb", label: "Airbnb" },
-  { id: "expedia", label: "Expedia" },
-  { id: "operador", label: "Operador turístico" },
-  { id: "agencia", label: "Agencia de viajes" },
-];
+// El check-in se hace siempre a nombre del operador asignado al apto.
+// La reserva fue creada por el operador (vía su propio canal: voz a voz,
+// portal del operador, etc.) y luego enviada al edificio para registro.
 
 // ── Estancias activas (para Check-out) ──────────────────────────────────────
 export interface ActiveStay {
@@ -397,29 +374,45 @@ export interface ActiveStay {
   scheduledOut: string;
   manilla: string;
   nights: number;
-  total: number;
   operator: string;
   receptionist: string;
+  rnt: string;
 }
 
 export const activeStays: ActiveStay[] = [
-  { folio: "F-2026-04812", registro: "R-15891", apartment: "1502", guestName: "Laura Pérez Castaño", pax: 3, checkIn: "16 Jun · 11:42", scheduledOut: "Hoy · 11:00", manilla: "3640-3642", nights: 7, total: 4_900_000, operator: "Caribbean Stays", receptionist: "María" },
-  { folio: "F-2026-04815", registro: "R-15894", apartment: "2705", guestName: "Familia Restrepo", pax: 5, checkIn: "17 Jun · 15:10", scheduledOut: "Hoy · 11:00", manilla: "3651-3655", nights: 5, total: 6_750_000, operator: "Palmetto Rentals", receptionist: "Tatiana" },
-  { folio: "F-2026-04816", registro: "R-15895", apartment: "1903", guestName: "John Carter", pax: 2, checkIn: "18 Jun · 18:00", scheduledOut: "Hoy · 12:00", manilla: "3660-3661", nights: 5, total: 3_200_000, operator: "Caribbean Stays", receptionist: "María" },
-  { folio: "F-2026-04820", registro: "R-15901", apartment: "3505", guestName: "Diego Salazar", pax: 2, checkIn: "19 Jun · 14:20", scheduledOut: "Mañana · 11:00", manilla: "3675-3676", nights: 4, total: 4_100_000, operator: "Operador Directo", receptionist: "María" },
-  { folio: "F-2026-04823", registro: "R-15904", apartment: "3204", guestName: "Ana Méndez", pax: 4, checkIn: "16 Jun · 14:00", scheduledOut: "23 Jun · 11:00", manilla: "3635-3639", nights: 7, total: 5_950_000, operator: "Cartagena Vibes", receptionist: "Tatiana" },
-  { folio: "F-2026-04826", registro: "R-15907", apartment: "2904", guestName: "Mariana López", pax: 3, checkIn: "20 Jun · 16:00", scheduledOut: "25 Jun · 11:00", manilla: "3690-3692", nights: 5, total: 4_500_000, operator: "Caribbean Stays", receptionist: "María" },
-  { folio: "F-2026-04829", registro: "R-15910", apartment: "4001", guestName: "Familia Botero", pax: 6, checkIn: "21 Jun · 12:00", scheduledOut: "28 Jun · 11:00", manilla: "3700-3705", nights: 7, total: 11_900_000, operator: "Palmetto Rentals", receptionist: "Tatiana" },
+  { folio: "F-2026-04812", registro: "R-15891", apartment: "1502", guestName: "Laura Pérez Castaño", pax: 3, checkIn: "16 Jun · 11:42", scheduledOut: "Hoy · 11:00", manilla: "3640-3642", nights: 7, operator: "Blue Castle", receptionist: "María", rnt: "RNT 54211" },
+  { folio: "F-2026-04815", registro: "R-15894", apartment: "2705", guestName: "Familia Restrepo", pax: 5, checkIn: "17 Jun · 15:10", scheduledOut: "Hoy · 11:00", manilla: "3651-3655", nights: 5, operator: "Inm. Cartagena de Indias", receptionist: "Tatiana", rnt: "RNT 54117" },
+  { folio: "F-2026-04816", registro: "R-15895", apartment: "1903", guestName: "John Carter", pax: 2, checkIn: "18 Jun · 18:00", scheduledOut: "Hoy · 12:00", manilla: "3660-3661", nights: 5, operator: "Lodging Cartagena", receptionist: "María", rnt: "RNT 54322" },
+  { folio: "F-2026-04820", registro: "R-15901", apartment: "3505", guestName: "Diego Salazar", pax: 2, checkIn: "19 Jun · 14:20", scheduledOut: "Mañana · 11:00", manilla: "3675-3676", nights: 4, operator: "Mar&Sol Arriendos", receptionist: "María", rnt: "RNT 54705" },
+  { folio: "F-2026-04823", registro: "R-15904", apartment: "3204", guestName: "Ana Méndez", pax: 4, checkIn: "16 Jun · 14:00", scheduledOut: "23 Jun · 11:00", manilla: "3635-3639", nights: 7, operator: "Cartagena VIP Rental", receptionist: "Tatiana", rnt: "RNT 54588" },
+  { folio: "F-2026-04826", registro: "R-15907", apartment: "2904", guestName: "Mariana López", pax: 3, checkIn: "20 Jun · 16:00", scheduledOut: "25 Jun · 11:00", manilla: "3690-3692", nights: 5, operator: "Blue Castle", receptionist: "María", rnt: "RNT 54402" },
+  { folio: "F-2026-04829", registro: "R-15910", apartment: "4001", guestName: "Familia Botero", pax: 6, checkIn: "21 Jun · 12:00", scheduledOut: "28 Jun · 11:00", manilla: "3700-3705", nights: 7, operator: "American Realty", receptionist: "Tatiana", rnt: "RNT 54901" },
 ];
 
 // ── Reportes (datos mensuales/anuales) ──────────────────────────────────────
+// Sin valores monetarios: el edificio reporta noches, reservas y ocupación
+// (los precios los manejan los operadores con sus huéspedes, no la admin).
 export const monthlyOccupancy2026 = [
-  { mes: "Ene", ocupacion: 62, ingresos: 142_000_000, noches: 1184 },
-  { mes: "Feb", ocupacion: 68, ingresos: 158_000_000, noches: 1245 },
-  { mes: "Mar", ocupacion: 81, ingresos: 198_500_000, noches: 1502 },
-  { mes: "Abr", ocupacion: 74, ingresos: 176_300_000, noches: 1378 },
-  { mes: "May", ocupacion: 70, ingresos: 161_900_000, noches: 1290 },
-  { mes: "Jun", ocupacion: 78, ingresos: 184_700_000, noches: 1432 },
+  { mes: "Ene", ocupacion: 62, reservas: 184, noches: 1184 },
+  { mes: "Feb", ocupacion: 68, reservas: 198, noches: 1245 },
+  { mes: "Mar", ocupacion: 81, reservas: 232, noches: 1502 },
+  { mes: "Abr", ocupacion: 74, reservas: 212, noches: 1378 },
+  { mes: "May", ocupacion: 70, reservas: 201, noches: 1290 },
+  { mes: "Jun", ocupacion: 78, reservas: 223, noches: 1432 },
+];
+
+// ── Operadores con más actividad del año (sustituye "ingresos") ────────────
+export const operadoresActividad = [
+  { operador: "Blue Castle", aptos: 14, reservas: 132, noches: 924 },
+  { operador: "Lodging Cartagena", aptos: 11, reservas: 118, noches: 862 },
+  { operador: "Mar&Sol Arriendos", aptos: 9, reservas: 96, noches: 712 },
+  { operador: "American Realty", aptos: 8, reservas: 88, noches: 654 },
+  { operador: "Inm. Cartagena de Indias", aptos: 7, reservas: 81, noches: 588 },
+  { operador: "Cartagena VIP Rental", aptos: 6, reservas: 72, noches: 524 },
+  { operador: "Faro SAS", aptos: 5, reservas: 58, noches: 412 },
+  { operador: "Santander Inmobiliaria", aptos: 5, reservas: 52, noches: 388 },
+  { operador: "Corpusaveg", aptos: 4, reservas: 41, noches: 296 },
+  { operador: "Cartagena Es Mi Casa", aptos: 4, reservas: 38, noches: 275 },
 ];
 
 export const guestAgeBreakdown = [
@@ -448,14 +441,14 @@ export const reservationsByCountry = [
 ];
 
 export const topApartmentsYear = [
-  { apto: "3801", noches: 224, ingresos: 132_400_000 },
-  { apto: "4102", noches: 218, ingresos: 128_900_000 },
-  { apto: "3505", noches: 198, ingresos: 112_200_000 },
-  { apto: "2903", noches: 184, ingresos: 102_750_000 },
-  { apto: "4001", noches: 176, ingresos: 96_100_000 },
-  { apto: "3204", noches: 168, ingresos: 89_500_000 },
-  { apto: "2705", noches: 161, ingresos: 84_800_000 },
-  { apto: "1903", noches: 149, ingresos: 76_300_000 },
-  { apto: "2904", noches: 142, ingresos: 71_900_000 },
-  { apto: "1502", noches: 134, ingresos: 66_200_000 },
+  { apto: "3801", noches: 224, reservas: 32, operador: "Blue Castle" },
+  { apto: "4102", noches: 218, reservas: 28, operador: "Lodging Cartagena" },
+  { apto: "3505", noches: 198, reservas: 27, operador: "Mar&Sol Arriendos" },
+  { apto: "2903", noches: 184, reservas: 26, operador: "Blue Castle" },
+  { apto: "4001", noches: 176, reservas: 24, operador: "American Realty" },
+  { apto: "3204", noches: 168, reservas: 25, operador: "Cartagena VIP Rental" },
+  { apto: "2705", noches: 161, reservas: 23, operador: "Inm. Cartagena de Indias" },
+  { apto: "1903", noches: 149, reservas: 22, operador: "Lodging Cartagena" },
+  { apto: "2904", noches: 142, reservas: 21, operador: "Blue Castle" },
+  { apto: "1502", noches: 134, reservas: 20, operador: "Mar&Sol Arriendos" },
 ];

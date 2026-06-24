@@ -52,7 +52,7 @@ export function BuildingMap() {
                         className={cn(
                           "h-2.5 flex-1 rounded-sm transition-colors hover:brightness-125",
                           state === "ocupado"
-                            ? "bg-gradient-to-r from-cyan-400 to-sky-500"
+                            ? "bg-gradient-to-r from-primary to-primary/70"
                             : "bg-muted/40"
                         )}
                       />
@@ -64,7 +64,7 @@ export function BuildingMap() {
           </div>
           <div className="mt-3 flex items-center gap-3 text-[11px] text-muted-foreground">
             <span className="flex items-center gap-1.5">
-              <span className="size-2 rounded-sm bg-gradient-to-r from-cyan-400 to-sky-500" />
+              <span className="size-2 rounded-sm bg-gradient-to-r from-primary to-primary/70" />
               Ocupado
             </span>
             <span className="flex items-center gap-1.5">
