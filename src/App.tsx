@@ -46,16 +46,26 @@ export default function App() {
             {page === "registros" && <Placeholder title="Registros" />}
           </div>
 
-          <footer className="py-6 mt-6 text-center text-[11.5px] text-muted-foreground/70">
-            Palmetto Eliptic · Bocagrande, Cartagena · Demo build · transiciones por{" "}
-            <a
-              className="underline-offset-2 hover:underline hover:text-primary"
-              href="https://transitions.dev"
-              target="_blank"
-              rel="noreferrer"
-            >
-              transitions.dev
-            </a>
+          <footer className="mt-8 mb-2 space-y-3">
+            <div className="rounded-xl border border-border/60 bg-card/30 px-5 py-4 text-[12px] leading-relaxed text-muted-foreground">
+              <p>
+                El sistema es <span className="font-semibold text-foreground">desarrollado e implementado por DT Growth Partners</span> con tecnología propia.
+                Toda la información, datos históricos y configuraciones del edificio son de
+                <span className="text-foreground"> propiedad exclusiva del Edificio Palmetto Eliptic</span> y están disponibles para exportación
+                en cualquier momento que lo soliciten. DT Growth Partners se compromete a mantener el sistema operativo y en mejora continua como parte del servicio mensual.
+              </p>
+            </div>
+            <div className="text-center text-[11px] text-muted-foreground/70">
+              Palmetto Eliptic · Bocagrande, Cartagena · Demo build · transiciones por{" "}
+              <a
+                className="underline-offset-2 hover:underline hover:text-primary"
+                href="https://transitions.dev"
+                target="_blank"
+                rel="noreferrer"
+              >
+                transitions.dev
+              </a>
+            </div>
           </footer>
         </div>
       </main>
