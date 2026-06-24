@@ -40,3 +40,7 @@ pnpm-debug.log*
 # Misc
 .cache/
 coverage/
+
+# tsc accidental outputs
+vite.config.js
+vite.config.d.ts
