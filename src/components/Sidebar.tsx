@@ -56,10 +56,7 @@ export function Sidebar({ active, onSelect }: SidebarProps) {
     <aside className="hidden lg:flex w-[248px] shrink-0 flex-col gap-1 border-r border-border/60 bg-gradient-to-b from-card/80 to-card/40 backdrop-blur-xl p-3">
       {/* Logo */}
       <div className="px-2 pt-3 pb-2 mb-2">
-        <PalmettoLogo className="h-10 w-auto text-foreground" />
-        <div className="mt-1.5 ml-1 text-[10.5px] uppercase tracking-[0.22em] text-muted-foreground">
-          Eliptic · Bocagrande
-        </div>
+        <PalmettoLogo className="h-14 w-auto text-foreground" />
       </div>
 
       {/* Building card */}

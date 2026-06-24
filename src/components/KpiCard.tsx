@@ -14,15 +14,18 @@ interface KpiCardProps {
   sparkline?: number[];
 }
 
+// Light mode: every card uses the brand primary (#015480) so the dashboard
+// reads as a single product, not a rainbow. Dark mode keeps tone variety
+// because contrast is easier there.
 const tonePalette = {
   primary:
     "from-primary/25 via-primary/10 to-transparent text-primary ring-primary/30",
   success:
-    "from-emerald-500/25 via-emerald-500/10 to-transparent text-emerald-600 ring-emerald-500/30 dark:text-emerald-300 dark:from-emerald-400/30 dark:via-emerald-500/10 dark:ring-emerald-400/25",
+    "from-primary/20 via-primary/8 to-transparent text-primary ring-primary/25 dark:from-emerald-400/30 dark:via-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-400/25",
   warning:
-    "from-amber-500/25 via-amber-500/10 to-transparent text-amber-600 ring-amber-500/30 dark:text-amber-300 dark:from-amber-400/30 dark:via-amber-500/10 dark:ring-amber-400/25",
+    "from-primary/20 via-primary/8 to-transparent text-primary ring-primary/25 dark:from-amber-400/30 dark:via-amber-500/10 dark:text-amber-300 dark:ring-amber-400/25",
   destructive:
-    "from-rose-500/25 via-rose-500/10 to-transparent text-rose-600 ring-rose-500/30 dark:text-rose-300 dark:from-rose-400/30 dark:via-rose-500/10 dark:ring-rose-400/25",
+    "from-primary/20 via-primary/8 to-transparent text-primary ring-primary/25 dark:from-rose-400/30 dark:via-rose-500/10 dark:text-rose-300 dark:ring-rose-400/25",
 };
 
 export function KpiCard({
@@ -94,8 +97,11 @@ export function KpiCard({
                 .map((v, i) => `${i * 10},${30 - ((v - min) / range) * 28 - 1}`)
                 .join(" ");
               const area = `0,30 ${points} ${(sparkline.length - 1) * 10},30`;
+              // Pass the full palette so both `text-primary` and any
+              // `dark:text-*` override land — currentColor follows whichever
+              // wins at render time.
               return (
-                <g className={cn("transition-colors", tonePalette[tone].split(" ").find((c) => c.startsWith("text-")))}>
+                <g className={cn("transition-colors", tonePalette[tone])}>
                   <polygon fill={`url(#spark-${label})`} points={area} />
                   <polyline
                     fill="none"

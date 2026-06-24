@@ -89,7 +89,7 @@ export const kpis = {
   visitantesHoy: 47,
   visitantesDelta: 12,
   manillasDisponibles: 4720,
-  manillasDelta: -180,
+  manillasDelta: -3.7,
 };
 
 // ── Serie histórica de ocupación (últimos 30 días) ─────────────────────────
