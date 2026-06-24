@@ -17,7 +17,7 @@ import {
   Building2,
   Sparkles,
   FileText,
-  Wallet,
+  Luggage,
   Archive,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -38,7 +38,7 @@ export type PageId =
   | "piscina"
   | "eventos"
   | "reservas"
-  | "caja"
+  | "maletas"
   | "migracion"
   | "registros";
 
@@ -56,7 +56,7 @@ const items: { id: PageId; label: string; icon: typeof LayoutDashboard; badge?: 
   { id: "eventos", label: "Eventos", icon: PartyPopper, badge: "2" },
   { id: "reservas", label: "Reservas", icon: CalendarCheck, badge: "6" },
   { id: "reportes", label: "Reportes", icon: BarChart3 },
-  { id: "caja", label: "Caja", icon: Wallet },
+  { id: "maletas", label: "Maletas", icon: Luggage },
   { id: "migracion", label: "Migración", icon: FileText },
   { id: "registros", label: "Registros", icon: Archive },
 ];

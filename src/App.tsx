@@ -41,7 +41,7 @@ export default function App() {
             {page === "piscina" && <Placeholder title="Piscina" />}
             {page === "eventos" && <Placeholder title="Eventos / Salón social" />}
             {page === "reservas" && <Placeholder title="Reservas" />}
-            {page === "caja" && <Placeholder title="Caja" />}
+            {page === "maletas" && <Placeholder title="Maletas" />}
             {page === "migracion" && <Placeholder title="Migración" />}
             {page === "registros" && <Placeholder title="Registros" />}
           </div>
