@@ -401,18 +401,38 @@ export const monthlyOccupancy2026 = [
   { mes: "Jun", ocupacion: 78, reservas: 223, noches: 1432 },
 ];
 
-// ── Operadores con más actividad del año (sustituye "ingresos") ────────────
-export const operadoresActividad = [
-  { operador: "Blue Castle", aptos: 14, reservas: 132, noches: 924 },
-  { operador: "Lodging Cartagena", aptos: 11, reservas: 118, noches: 862 },
-  { operador: "Mar&Sol Arriendos", aptos: 9, reservas: 96, noches: 712 },
-  { operador: "American Realty", aptos: 8, reservas: 88, noches: 654 },
-  { operador: "Inm. Cartagena de Indias", aptos: 7, reservas: 81, noches: 588 },
-  { operador: "Cartagena VIP Rental", aptos: 6, reservas: 72, noches: 524 },
-  { operador: "Faro SAS", aptos: 5, reservas: 58, noches: 412 },
-  { operador: "Santander Inmobiliaria", aptos: 5, reservas: 52, noches: 388 },
-  { operador: "Corpusaveg", aptos: 4, reservas: 41, noches: 296 },
-  { operador: "Cartagena Es Mi Casa", aptos: 4, reservas: 38, noches: 275 },
+// ── Operadores con su actividad del año (los 18 reales del Palmetto) ───────
+export interface OperadorDetalle {
+  operador: string;
+  representante: string;
+  aptos: number;
+  reservas: number;
+  noches: number;
+  ocupacion: number;       // % promedio de ocupación de sus aptos
+  estado: "activo" | "pausado";
+  contacto: string;
+  rntCount: number;        // RNTs registrados
+}
+
+export const operadoresActividad: OperadorDetalle[] = [
+  { operador: "Blue Castle",              representante: "Leonardo Rossy",     aptos: 14, reservas: 132, noches: 924, ocupacion: 82, estado: "activo",  contacto: "leo@bluecastle.co",        rntCount: 14 },
+  { operador: "Lodging Cartagena",        representante: "Director comercial", aptos: 11, reservas: 118, noches: 862, ocupacion: 79, estado: "activo",  contacto: "reservas@lodgingctg.com",  rntCount: 11 },
+  { operador: "Mar&Sol Arriendos",        representante: "Marisol Benedetti",  aptos:  9, reservas:  96, noches: 712, ocupacion: 76, estado: "activo",  contacto: "marisol@marsol-arriendos.co", rntCount: 9 },
+  { operador: "American Realty",          representante: "Tara Klarr",         aptos:  8, reservas:  88, noches: 654, ocupacion: 74, estado: "activo",  contacto: "tara@americanrealty.us",   rntCount: 8 },
+  { operador: "Inm. Cartagena de Indias", representante: "Yasmina Castro",     aptos:  7, reservas:  81, noches: 588, ocupacion: 72, estado: "activo",  contacto: "yasmina@inmocartagena.co", rntCount: 7 },
+  { operador: "Cartagena VIP Rental",     representante: "Director general",   aptos:  6, reservas:  72, noches: 524, ocupacion: 70, estado: "activo",  contacto: "info@cartagenaviprental.com", rntCount: 6 },
+  { operador: "Faro SAS",                 representante: "Alfredo Arellana",   aptos:  5, reservas:  58, noches: 412, ocupacion: 68, estado: "activo",  contacto: "alfredo@farosas.co",       rntCount: 5 },
+  { operador: "Santander Inmobiliaria",   representante: "Ivan Santander",     aptos:  5, reservas:  52, noches: 388, ocupacion: 66, estado: "activo",  contacto: "ivan@santanderinmo.co",    rntCount: 5 },
+  { operador: "Corpusaveg",               representante: "Teresinha Savegnago", aptos: 4, reservas:  41, noches: 296, ocupacion: 62, estado: "activo",  contacto: "teresinha@corpusaveg.co",  rntCount: 4 },
+  { operador: "Cartagena Es Mi Casa",     representante: "Coordinación",       aptos:  4, reservas:  38, noches: 275, ocupacion: 60, estado: "activo",  contacto: "hola@cartagenaesmicasa.com", rntCount: 4 },
+  { operador: "INMSER Colombia",          representante: "Juan Carlos Dávila", aptos:  4, reservas:  36, noches: 261, ocupacion: 58, estado: "activo",  contacto: "jc.davila@inmser.co",      rntCount: 4 },
+  { operador: "Invercartagena",           representante: "Coordinación",       aptos:  3, reservas:  29, noches: 208, ocupacion: 55, estado: "activo",  contacto: "info@invercartagena.co",   rntCount: 3 },
+  { operador: "Marisol Benedetti",        representante: "Marisol Benedetti",  aptos:  3, reservas:  26, noches: 188, ocupacion: 53, estado: "activo",  contacto: "marisol.b@gmail.com",       rntCount: 3 },
+  { operador: "Rafael Torres",            representante: "Rafael Torres",      aptos:  2, reservas:  22, noches: 154, ocupacion: 51, estado: "activo",  contacto: "rafael.torres@gmail.com",   rntCount: 2 },
+  { operador: "Darwin Ortiz",             representante: "Darwin Ortiz",       aptos:  2, reservas:  18, noches: 132, ocupacion: 48, estado: "activo",  contacto: "darwin.ortiz@gmail.com",    rntCount: 2 },
+  { operador: "Jordan Dimas",             representante: "Jordan Dimas",       aptos:  2, reservas:  16, noches: 118, ocupacion: 46, estado: "activo",  contacto: "jordan.dimas@gmail.com",    rntCount: 2 },
+  { operador: "Deyner Hernández",         representante: "Deyner Hernández",   aptos:  1, reservas:  11, noches:  82, ocupacion: 42, estado: "activo",  contacto: "deyner.hernandez@gmail.com", rntCount: 1 },
+  { operador: "Ana Milena Álvarez",       representante: "Ana Milena Álvarez", aptos:  1, reservas:   7, noches:  54, ocupacion: 38, estado: "pausado", contacto: "anamilena.alvarez@gmail.com", rntCount: 1 },
 ];
 
 export const guestAgeBreakdown = [

@@ -5,6 +5,7 @@ import {
   Users,
   UserPlus,
   HardHat,
+  Briefcase,
   Package,
   Car,
   CalendarCheck,
@@ -29,6 +30,7 @@ export type PageId =
   | "huespedes"
   | "visitantes"
   | "empleados"
+  | "operadores"
   | "paquetes"
   | "parqueadero"
   | "reservas"
@@ -43,6 +45,7 @@ const items: { id: PageId; label: string; icon: typeof LayoutDashboard; badge?: 
   { id: "huespedes", label: "Huéspedes", icon: Users },
   { id: "visitantes", label: "Visitantes", icon: UserPlus, badge: "47" },
   { id: "empleados", label: "Empleados", icon: HardHat },
+  { id: "operadores", label: "Operadores", icon: Briefcase, badge: "18" },
   { id: "paquetes", label: "Paquetes", icon: Package, badge: "12" },
   { id: "parqueadero", label: "Parqueadero", icon: Car },
   { id: "reservas", label: "Reservas", icon: CalendarCheck, badge: "6" },

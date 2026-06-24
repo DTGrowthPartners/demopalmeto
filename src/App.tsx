@@ -6,6 +6,7 @@ import { DashboardPage } from "@/pages/Dashboard";
 import { CheckInPage } from "@/pages/CheckIn";
 import { CheckOutPage } from "@/pages/CheckOut";
 import { ReportsPage } from "@/pages/Reports";
+import { OperadoresPage } from "@/pages/Operadores";
 import { useTheme } from "@/lib/useTheme";
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
             {page === "checkin" && <CheckInPage />}
             {page === "checkout" && <CheckOutPage />}
             {page === "reportes" && <ReportsPage />}
+            {page === "operadores" && <OperadoresPage />}
             {page === "huespedes" && <Placeholder title="Huéspedes" />}
             {page === "visitantes" && <Placeholder title="Visitantes" />}
             {page === "empleados" && <Placeholder title="Empleados / Personal operativo" />}
